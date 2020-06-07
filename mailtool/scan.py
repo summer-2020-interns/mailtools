@@ -22,8 +22,8 @@ def process_file(path, cb):
     if path.endswith(".mbox"):
         mails = mailbox.mbox( path )
         process_mailbox(mails, cb)
-#    else:
-#        raise RuntimeError("Don't know how to process "+path)
+    else:
+        logging.error("Not a mbox file %s",path)
     
 def scan_directory(dirname, cb):
     """Right now we hard-code mbox"""
@@ -34,8 +34,29 @@ def scan_directory(dirname, cb):
             process_file( os.path.join(dirpath, fname),cb)
 
 def message_printer(message):
-    print("{:20s} {:30s} {:40s}".format(message['date'],message['from'],message['subject']))
+    if message['date'] == None:
+        date = "No date"
+    else:
+        date = message['date']
 
+    if message['from'] == None:
+        From = "No From"
+    else:
+        From = message['from']
+
+    if message['subject'] == None:
+        subject = "No Subject"
+    else:
+        subject = message['subject']    
+
+#    print("{:20s} {:30s} {:40s}".format(message['date'],message['from'],message['subject']))
+    print(date)
+    print(From)
+    print(subject)
+    print("\n")
+    #if(message['date'] == None or message['from' == None] or message['subject'] == None):
+    #    print("Error Above")
+        
 if __name__=="__main__":
     import argparse, resource
     parser = argparse.ArgumentParser(description='Extract specified variables from AHS files.',
